@@ -17,10 +17,10 @@ func main() {
 		select {
 		case <-ticker.C:
 			go func() {
+				fmt.Println("NUEVA ITERACION XDDDDDDDD")
 				client := k3s.New()
 				logsbytes, err := client.GetLogs()
 				if err != nil {
-					fmt.Println("NUEVA ITERACION XDDDDDDDD")
 					fmt.Println(err)
 				} else {
 					fmt.Println(string(logsbytes))
