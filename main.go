@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"os"
+	"sidecar/k3s"
 	"time"
 )
 
@@ -12,16 +12,18 @@ func main() {
 	fmt.Println("Running Sidecar logger")
 	ticker := time.NewTicker(60 * time.Second)
 	quit := make(chan struct{})
+
 	for {
 		select {
 		case <-ticker.C:
 			go func() {
-				podId := os.Getenv(POD_ID)
-				if len(podId) > 0 {
-					fmt.Println("POD ID")
-					fmt.Println(podId)
+				client := k3s.New()
+				logsbytes, err := client.GetLogs()
+				if err != nil {
+					fmt.Println("NUEVA ITERACION XDDDDDDDD")
+					fmt.Println(err)
 				} else {
-					fmt.Println("NO HOSTNAME ENV")
+					fmt.Println(string(logsbytes))
 				}
 			}()
 		case <-quit:
