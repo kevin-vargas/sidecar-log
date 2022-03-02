@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"time"
 
-	"sidecar-log/k3s"
-	"sidecar-log/pubsub"
+	"github.com/kevin-vargas/sidecar-log/k3s"
+	"github.com/kevin-vargas/sidecar-log/pubsub"
 
 	"github.com/joho/godotenv"
 )

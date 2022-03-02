@@ -3,7 +3,7 @@ package pubsub
 import (
 	"fmt"
 
-	"sidecar-log/configs"
+	"github.com/kevin-vargas/sidecar-log/configs"
 
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 )
