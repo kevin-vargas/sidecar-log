@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/kevin-vargas/sidecar-log/configs"
 	"github.com/kevin-vargas/sidecar-log/k3s"
 	"github.com/kevin-vargas/sidecar-log/pubsub"
 
@@ -47,10 +48,11 @@ func readLog(m *logPubSub, log []byte) {
 func main() {
 	fmt.Println("Running Sidecar logger")
 	godotenv.Load(".env")
+	cfg := configs.Get()
 	ticker := time.NewTicker(60 * time.Second)
 	quit := make(chan struct{})
 	clientK3S := k3s.New()
-	clientMQTT := pubsub.New()
+	clientMQTT := pubsub.New(cfg.MQTT.CLIENT.ID)
 	clientLogger := &logPubSub{
 		clientMQTT,
 		"log",
