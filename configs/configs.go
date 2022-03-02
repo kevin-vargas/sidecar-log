@@ -36,6 +36,7 @@ type cfg struct {
 		NAMESPACE string `yaml:"namespace"`
 		APP       string `yaml:"app"`
 	} `yaml:"k3s"`
+	APP string
 }
 
 var once sync.Once
@@ -69,5 +70,11 @@ func createConfig() (*cfg, error) {
 	if err != nil {
 		return nil, err
 	}
-	return cfg, nil
+	return customFields(cfg), nil
+}
+
+func customFields(c *cfg) *cfg {
+	// app name
+	c.APP = os.Getenv("APP")
+	return c
 }

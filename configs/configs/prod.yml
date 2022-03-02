@@ -2,7 +2,7 @@ mqtt:
     broker: emqx-service
     port: 1883
     client:
-        id: go_mqtt_client2
+        id: go_mqtt_client
         username: admin
         password: public
 k3s:

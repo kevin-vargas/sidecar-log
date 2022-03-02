@@ -7,6 +7,7 @@ Para poder ejecutar el sidecar de forma local es necesario generar el un archivo
 ```
 SCOPE=dev
 HOSTNAME=libre-job-56d8df4d66-swfb7
+APP=sidecar-log
 ```
 Donde `hostname` es el pod al cual contiene el container con la aplicacion a extender la funcionalidad.
 

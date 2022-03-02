@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/kevin-vargas/sidecar-log/configs"
-	"github.com/kevin-vargas/sidecar-log/k3s"
 	"github.com/kevin-vargas/sidecar-log/pubsub"
 
 	"github.com/joho/godotenv"
@@ -24,7 +22,7 @@ type logPubSub struct {
 func makeEntryHandle(m *logPubSub) func(entry []byte) {
 	return func(entry []byte) {
 		//TODO: error handle
-		m.Publish(m.topic, string(entry))
+		m.Publish(m.topic, entry)
 	}
 }
 
@@ -48,20 +46,22 @@ func readLog(m *logPubSub, log []byte) {
 func main() {
 	fmt.Println("Running Sidecar logger")
 	godotenv.Load(".env")
-	cfg := configs.Get()
 	ticker := time.NewTicker(60 * time.Second)
 	quit := make(chan struct{})
-	clientK3S := k3s.New()
-	clientMQTT := pubsub.New(cfg.MQTT.CLIENT.ID)
+	//clientK3S := k3s.New()
+	clientMQTT := pubsub.New()
 	clientLogger := &logPubSub{
 		clientMQTT,
 		"log",
 	}
+	clientMQTT.Subscribe("log")
 	for {
 		select {
 		case <-ticker.C:
 			go func() {
-				logsbytes, err := clientK3S.GetLogs()
+				logsbytes := []byte("uno\ndos\ntres\ncuatro")
+				var err error
+				//logsbytes, err := clientK3S.GetLogs()
 				if err != nil {
 					fmt.Println(err)
 				} else {

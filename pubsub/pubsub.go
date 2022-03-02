@@ -32,8 +32,8 @@ type MQTT struct {
 	client *mqtt.Client
 }
 
-func New(clientId string) MQTTI {
-	client, err := getInstanceMqttclient(clientId)
+func New() MQTTI {
+	client, err := getInstanceMqttclient()
 	if err != nil {
 		panic(err.Error())
 	}
@@ -57,11 +57,11 @@ func (m *MQTT) Subscribe(topic string) error {
 	return err
 }
 
-func getInstanceMqttclient(clientId string) (*mqtt.Client, error) {
+func getInstanceMqttclient() (*mqtt.Client, error) {
 	cfg := configs.Get()
 	opts := mqtt.NewClientOptions()
 	opts.AddBroker(fmt.Sprintf("tcp://%s:%d", cfg.MQTT.BROKER, cfg.MQTT.PORT))
-	opts.SetClientID(clientId)
+	opts.SetClientID(cfg.APP)
 	opts.SetUsername(cfg.MQTT.CLIENT.USERNAME)
 	opts.SetPassword(cfg.MQTT.CLIENT.PASSWORD)
 	opts.OnConnect = connectHandler
