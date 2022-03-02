@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"sidecar/configs"
 	"time"
 
 	v1 "k8s.io/api/core/v1"
@@ -19,10 +20,8 @@ import (
 const DEV_SCOPE = "dev"
 
 type config struct {
-	REST       *rest.Config
-	APP_NAME   string
-	POD_ID     string
-	NAME_SPACE string
+	REST   *rest.Config
+	POD_ID string
 }
 
 type K3S struct {
@@ -44,15 +43,16 @@ func New() *K3S {
 }
 
 func (cs *K3S) GetLogs() ([]byte, error) {
+	k3sConfig := configs.Get().K3S
 	logOptions := &v1.PodLogOptions{
-		Container: cs.APP_NAME,
+		Container: k3sConfig.APP,
 	}
 	if cs.last != nil {
 		logOptions.SinceTime = &metav1.Time{
 			Time: *cs.last,
 		}
 	}
-	req := cs.client.CoreV1().Pods(cs.NAME_SPACE).GetLogs(cs.POD_ID, logOptions)
+	req := cs.client.CoreV1().Pods(k3sConfig.NAMESPACE).GetLogs(cs.POD_ID, logOptions)
 	logs, err := req.Stream(context.TODO())
 	if err != nil {
 		return nil, err
@@ -71,31 +71,23 @@ func (cs *K3S) GetLogs() ([]byte, error) {
 
 func getConfig() (*config, error) {
 	result := config{
-		APP_NAME:   "app",
-		NAME_SPACE: "kevin",
+		POD_ID: os.Getenv("HOSTNAME"),
 	}
 	var restConfig *rest.Config
-	var podId string
 	var err error
-	if os.Getenv("SCOPE") == DEV_SCOPE {
+	if configs.IsDev() {
 		home, exists := os.LookupEnv("HOME")
 		if !exists {
 			home = "/root"
 		}
 		configPath := filepath.Join(home, ".kube", "config")
 		restConfig, err = clientcmd.BuildConfigFromFlags("", configPath)
-		podId = "libre-job-56d8df4d66-md9cg"
 	} else {
 		restConfig, err = rest.InClusterConfig()
-		if err != nil {
-			return nil, err
-		}
-		podId = os.Getenv("HOSTNAME")
 	}
 	if err != nil {
 		return nil, err
 	}
-	result.POD_ID = podId
 	result.REST = restConfig
 	return &result, nil
 }

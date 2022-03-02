@@ -32,6 +32,10 @@ type cfg struct {
 			PASSWORD string `yaml:"password"`
 		} `yaml:"client"`
 	} `yaml:"mqtt"`
+	K3S struct {
+		NAMESPACE string `yaml:"namespace"`
+		APP       string `yaml:"app"`
+	} `yaml:"k3s"`
 }
 
 var once sync.Once

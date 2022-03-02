@@ -5,3 +5,6 @@ mqtt:
         id: go_mqtt_client2
         username: admin
         password: public
+k3s:
+    namespace: kevin
+    app: app
