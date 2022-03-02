@@ -1,4 +1,4 @@
-module sidecar
+module github.com/kevin-vargas/sidecar-log
 
 go 1.17
 

@@ -3,9 +3,10 @@ package main
 import (
 	"bytes"
 	"fmt"
-	"sidecar/k3s"
-	"sidecar/pubsub"
 	"time"
+
+	"sidecar-log/k3s"
+	"sidecar-log/pubsub"
 
 	"github.com/joho/godotenv"
 )
