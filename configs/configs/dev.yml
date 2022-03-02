@@ -1,0 +1,7 @@
+mqtt:
+    broker: localhost
+    port: 1883
+    client:
+        id: go_mqtt_client2
+        username: admin
+        password: public

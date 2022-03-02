@@ -49,7 +49,7 @@ func (cs *K3S) GetLogs() ([]byte, error) {
 	}
 	if cs.last != nil {
 		logOptions.SinceTime = &metav1.Time{
-			*cs.last,
+			Time: *cs.last,
 		}
 	}
 	req := cs.client.CoreV1().Pods(cs.NAME_SPACE).GetLogs(cs.POD_ID, logOptions)
@@ -65,6 +65,7 @@ func (cs *K3S) GetLogs() ([]byte, error) {
 	}
 	timeNow := time.Now()
 	cs.last = &timeNow
+	//TODO: check to return io.read
 	return buf.Bytes(), nil
 }
 
@@ -83,7 +84,7 @@ func getConfig() (*config, error) {
 		}
 		configPath := filepath.Join(home, ".kube", "config")
 		restConfig, err = clientcmd.BuildConfigFromFlags("", configPath)
-		podId = "libre-job-58694448bc-pw9m7"
+		podId = "libre-job-56d8df4d66-md9cg"
 	} else {
 		restConfig, err = rest.InClusterConfig()
 		if err != nil {

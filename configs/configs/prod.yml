@@ -1,0 +1,7 @@
+mqtt:
+    broker: en prod
+    port: 
+    client:
+        id:
+        username:
+        password:
