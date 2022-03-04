@@ -5,12 +5,11 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/kevin-vargas/sidecar-log/k3s"
 	"github.com/kevin-vargas/sidecar-log/pubsub"
 
 	"github.com/joho/godotenv"
 )
-
-const POD_ID = "HOSTNAME"
 
 type logPubSub struct {
 	pubsub.MQTTI
@@ -48,7 +47,7 @@ func main() {
 	godotenv.Load(".env")
 	ticker := time.NewTicker(60 * time.Second)
 	quit := make(chan struct{})
-	//clientK3S := k3s.New()
+	clientK3S := k3s.New()
 	clientMQTT := pubsub.New()
 	clientLogger := &logPubSub{
 		clientMQTT,
@@ -59,9 +58,7 @@ func main() {
 		select {
 		case <-ticker.C:
 			go func() {
-				logsbytes := []byte("uno\ndos\ntres\ncuatro")
-				var err error
-				//logsbytes, err := clientK3S.GetLogs()
+				logsbytes, err := clientK3S.GetLogs()
 				if err != nil {
 					fmt.Println(err)
 				} else {
