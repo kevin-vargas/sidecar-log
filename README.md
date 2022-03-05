@@ -1,5 +1,4 @@
 # Objetivos
-
 Este sidecar nos permite obtener el contenido por stdout de una aplicación por medio de la interaccion con la api de kubernetes, y lo envia por tramas a un pub sub para poder procesar estos logs de forma asincronica, se selecciono un mqtt broker debido a la infraestractura en cual se va a implementar.
 
 # Development
